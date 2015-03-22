@@ -7,12 +7,11 @@ class Pilha {
  private:
   int top;
   int max;
-  T* dados[];
+  T* dados = new T[max];
 
  public:
   Pilha() {
-    max = 100;
-    dados[max];
+    max = 10;
     top = -1;
   }
 
@@ -45,6 +44,9 @@ class Pilha {
   }
 
   int getPosTopo() {
+    if (PilhaVazia()) {
+      throw "Pilha Vazia!";
+    }
     return top;
   }
 
