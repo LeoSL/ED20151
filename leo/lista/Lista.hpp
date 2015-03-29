@@ -8,7 +8,7 @@ template <typename T>
 class Lista {
  private:
   int inicio = 0;
-  int pos = 0;
+  int pos;
   int ultimo;
   int tam = MAXLISTA;
   T* dados = new T[tam];
@@ -28,7 +28,9 @@ class Lista {
   }
 
   void adiciona(T dado) {
-    adicionaNaPosicao(dado, ultimo);
+    excecaoListaCheia();
+    ultimo++;
+    dados[ultimo] = dado;
   }
 
   void adicionaNoInicio(T dado) {
@@ -52,12 +54,16 @@ class Lista {
   }
 
   bool contem(T dado) {
-    int retorno = posicao(dado);
-    return typeid(retorno) == typeid(ultimo);
+    excecaoListaVazia();
+    pos = 0;
+    while (!(igual(dados[pos], dado)) && pos <= ultimo) {
+      pos++;
+    }
+    return !(pos > ultimo);
   }
 
   bool igual(T dado1, T dado2) {
-    return !(maior(dado1, dado2) && menor(dado1, dado2));
+    return dado1 == dado2;
   }
 
   bool menor(T dado1, T dado2) {
@@ -70,8 +76,8 @@ class Lista {
 
   int posicao(T dado) {
     excecaoListaVazia();
-
-    while ((pos <= ultimo) && (dados[pos] != dado)) {
+    pos = 0;
+    while ((pos <= ultimo) && !(igual(dados[pos], dado))) {
       pos++;
     }
 
@@ -89,7 +95,7 @@ class Lista {
 
   void adicionaEmOrdem(T dado) {
     excecaoListaCheia();
-
+    pos = 0;
     while (pos <= ultimo && maior(dado, dados[pos])) {
       pos++;
     }
@@ -111,7 +117,8 @@ class Lista {
   }
 
   T retiraDaPosicao(int destino) {
-    if (destino < 0 || destino > ultimo + 1) {
+    excecaoListaVazia();
+    if (destino < 0 || destino > ultimo) {
       throw("Posicao Invalida!");
     }
 
@@ -140,9 +147,8 @@ class Lista {
   }
 
   void excecaoListaCheia() {
-    if (listaVazia()) {
+    if (listaCheia()) {
       throw("Lista Vazia!");
     }
   }
 };
-
